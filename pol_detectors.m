@@ -1,10 +1,4 @@
 %https://www.youtube.com/watch?v=UnXDQmjYvDk&list=PLn8PRpmsu08oLufaYWEvcuez8Rq7q4O7D&index=32
-%%
-%Sets program path to the parent of the current file
-%This is necessary to make load work in any computer
-CurrFPath = matlab.desktop.editor.getActiveFilename;
-CurrFPath = CurrFPath(1:end-18);
-cd(CurrFPath)
 %% Load Ground Truth
 
 

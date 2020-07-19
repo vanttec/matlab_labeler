@@ -8,11 +8,11 @@ cd(CurrFPath)
 %% Load Ground Truth
 
 
-load('police_labels.mat')
+load('gangster_labels.mat')
 %%
 %Create training data from ground truth
     %In case of multiple labels in the object:
-police_truth = selectLabels(gTruth,'police')
+gangster_truth = selectLabels(gTruth,'gangster')
 %%
 %Create folder for training data
 %if isfolder(fullfile('training_data'))
@@ -24,7 +24,7 @@ police_truth = selectLabels(gTruth,'police')
 
 %%
 %extracts a subset of ground truth dataset
-training_data = objectDetectorTrainingData(police_truth)
+training_data = objectDetectorTrainingData(gangster_truth)
 summary(training_data)
 %%
 %This segment of code extracts the image size (x,y) for each image in the
@@ -48,7 +48,7 @@ imageSizes = table('Size', [height(training_data), 2], 'VariableTypes', {'double
 %train de ACF detector
 detector = trainACFObjectDetector(training_data,'NumStages',5)
 %%
-save('police_detector.mat','detector');
+save('gangster_detector.mat','detector');
 %rmpath('training_data');
 %%
 % Specify the folder where the files are.
@@ -67,21 +67,21 @@ ImageNames = FilesTable.name
 %%
 %Makes a new table with ROI coordinates, width and height of the images in the
 %training session
-NewCoord = training_data(:, {'police', 'X', 'Y'})
+NewCoord = training_data(:, {'gangster', 'X', 'Y'})
 
 %Here we converted the matlab format, which is x & y from the bottom left
 %corner to x and y from the center point. 
 for iX = 1:height(training_data)
-    NewCoord{iX, 1}{1}(1) = (NewCoord{iX, 'police'}{1}(1) + ((NewCoord{iX, 'police'}{1}(3))/2));
-    NewCoord{iX, 1}{1}(2) = (NewCoord{iX, 'police'}{1}(2) - ((NewCoord{iX, 'police'}{1}(4))/2));
+    NewCoord{iX, 1}{1}(1) = (NewCoord{iX, 'gangster'}{1}(1) + ((NewCoord{iX, 'gangster'}{1}(3))/2));
+    NewCoord{iX, 1}{1}(2) = (NewCoord{iX, 'gangster'}{1}(2) - ((NewCoord{iX, 'gangster'}{1}(4))/2));
 end
 
 %Here we normalize the coordinates relative to the x size and y size
 for iX = 1:height(training_data)
-    NewCoord{iX, 1}{1}(1) = (NewCoord{iX, 'police'}{1}(1)/ NewCoord{iX, "X"});
-    NewCoord{iX, 1}{1}(2) = (NewCoord{iX, 'police'}{1}(2)/ NewCoord{iX, "Y"});
-    NewCoord{iX, 1}{1}(3) = (NewCoord{iX, 'police'}{1}(1)/ NewCoord{iX, "X"});
-    NewCoord{iX, 1}{1}(4) = (NewCoord{iX, 'police'}{1}(2)/ NewCoord{iX, "Y"});
+    NewCoord{iX, 1}{1}(1) = (NewCoord{iX, 'gangster'}{1}(1)/ NewCoord{iX, "X"});
+    NewCoord{iX, 1}{1}(2) = (NewCoord{iX, 'gangster'}{1}(2)/ NewCoord{iX, "Y"});
+    NewCoord{iX, 1}{1}(3) = (NewCoord{iX, 'gangster'}{1}(1)/ NewCoord{iX, "X"});
+    NewCoord{iX, 1}{1}(4) = (NewCoord{iX, 'gangster'}{1}(2)/ NewCoord{iX, "Y"});
 end
 
 %%
@@ -104,5 +104,7 @@ end
 %%
 %Ejecuta Pol_detectors que crea las labels del policia y agrega sus
 %coordenadas a los .txt ya existentes
+
+cd ../
 
 pol_detectors;
