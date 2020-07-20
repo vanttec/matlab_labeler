@@ -1,32 +1,27 @@
 %https://www.youtube.com/watch?v=UnXDQmjYvDk&list=PLn8PRpmsu08oLufaYWEvcuez8Rq7q4O7D&index=32
-%%
+
 %Sets program path to the parent of the current file
-%This is necessary to make load work in any computer
+%This is necessary to make 'load' work in any computer
 CurrFPath = matlab.desktop.editor.getActiveFilename;
 CurrFPath = CurrFPath(1:end-14);
 cd(CurrFPath)
+
 %% Load Ground Truth
-
-
 load('gangster_labels.mat')
-%%
+
 %Create training data from ground truth
     %In case of multiple labels in the object:
 gangster_truth = selectLabels(gTruth,'gangster')
-%%
-%Create folder for training data
-%if isfolder(fullfile('training_data'))
-%   cd training_data
-%else
-%    mkdir training_data
-%end
-%addpath('training_data')
 
-%%
 %extracts a subset of ground truth dataset
 training_data = objectDetectorTrainingData(gangster_truth)
 summary(training_data)
-%%
+
+%Trains and creates new detector algorithm using training data
+detector = trainACFObjectDetector(training_data,'NumStages', 5)
+save('gangster_detector.mat','detector');
+
+
 %This segment of code extracts the image size (x,y) for each image in the
 %training data
 imageSizes = table('Size', [height(training_data), 2], 'VariableTypes', {'double', 'double'}, 'VariableNames', {'X', 'Y'});
@@ -45,10 +40,7 @@ imageSizes = table('Size', [height(training_data), 2], 'VariableTypes', {'double
  
  training_data = [training_data imageSizes];
 %%
-%train de ACF detector
-detector = trainACFObjectDetector(training_data,'NumStages',5)
-%%
-save('gangster_detector.mat','detector');
+
 %rmpath('training_data');
 %%
 % Specify the folder where the files are.
@@ -106,5 +98,4 @@ end
 %coordenadas a los .txt ya existentes
 
 cd ../
-
 pol_detectors;
