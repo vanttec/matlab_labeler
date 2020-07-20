@@ -1,7 +1,7 @@
 %% *LABEL CREATION*
 
 CurrFPath = matlab.desktop.editor.getActiveFilename;
-CurrFPath = CurrFPath(1:end-22);
+CurrFPath = CurrFPath(1:end-20);
 cd(CurrFPath)
 
 load('gangster_detector.mat');
@@ -91,7 +91,7 @@ for iK = 1 : height(NewCoord)
     %Here we change the filename of each image to .txt
     currTxtName = NewCoord.Var1{iK}(1:end-4) + ".txt";
     %Open a new file
-a    TrainDataOut = fopen(currTxtName, 'w')
+    TrainDataOut = fopen(currTxtName, 'w')
     %Print the converted coordinates to  the file
     fprintf(TrainDataOut, "0\t");
     fprintf(TrainDataOut, '%.6f\t', NewCoord{iK,'BBX'});
@@ -105,7 +105,7 @@ end
 %% Load Ground Truth - Police
 
 CurrFPath = matlab.desktop.editor.getActiveFilename;
-CurrFPath = CurrFPath(1:end-22);
+CurrFPath = CurrFPath(1:end-20);
 cd(CurrFPath)
 
 load('police_detector.mat');

@@ -3,9 +3,9 @@
 %Sets program path to the parent of the current file
 %This is necessary to make load work in any computer
 CurrFPath = matlab.desktop.editor.getActiveFilename;
-CurrFPath = CurrFPath(1:end-20);
+CurrFPath = CurrFPath(1:end-18);
 cd(CurrFPath)
-%% Detector Training
+%% Detector Training 
 % Gangster
 
 
