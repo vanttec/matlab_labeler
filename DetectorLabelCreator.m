@@ -7,23 +7,37 @@ cd(CurrFPath)
 % This is the part where you choose which detector to use to create labels
 
 %Name of detector to load
-detectorName = 'gangster_detector.mat'
-%Name of label
-labelName = 'gangster'
+detectorName = 'police_detector.mat'
+%Name of labels to load if preexistent -- Important
+entryLabelsName = "gangster_det_labels.mat"
+%Name of label to detect
+labelName = 'police'
 %Name of label definition to load
-labelDefName = 'gangster_label_def.mat'
+labelDefName = 'police_label_def.mat'
 %Name of exit labels (detector labels)
-exitLabelsName = "gangster_det_labels.mat";
+exitLabelsName = "polgang_det_labels.mat";
 %% 
-% Loads the detector and label definitions
+% Loads the detector and label definitions, this code assumes they have the 
+% same set of images to work with
 
 load(detectorName);
 labelDef = load(labelDefName);
+%% 
+% This segment verifies if the entry labels to load exist, then adds them in 
+% the same table
+
+bEntryLabelExist = isfile(entryLabelsName);
+
+if (bEntryLabelExist)  
+    load (entryLabelsName);
+    labelDef.labelDefs = [det_labels.LabelDefinitions ; labelDef.labelDefs]
+    
+end
 %%
 %This segment of the code focuses on creating the labels for the validation
 %images
 
-% Specify the folder where the files are.
+% Specify the folder where the images are.
 cd val_data/
 
 % Assign train data folder path to var myFolder
@@ -40,7 +54,7 @@ FilesTable = struct2table(theFiles)
 
 %This segment of code extracts the image size (x,y) for each image in the
 %training data
-LabelCoords = table('Size', [height(FilesTable), 1], 'VariableTypes', {'cell'}, 'VariableNames', {'gangster'});
+LabelCoords = table('Size', [height(FilesTable), 1], 'VariableTypes', {'cell'}, 'VariableNames', {labelName});
  for k=1:height(FilesTable)
     img = imread(char(FilesTable.(1)(k))); 
     
@@ -63,10 +77,19 @@ imshow(img)
     end
  end
 %% 
+% This segment of the code adds the tables of the labels together if multiple 
+% exist
+
+if (bEntryLabelExist)
+    LabelCoords = [LabelCoords det_labels.LabelData]
+end
+%% 
 % *Creation of new labels from the detector*
 
  gtSource = groundTruthDataSource(FilesTable.name);
- det_labels = groundTruth(gtSource, labelDef.labelDefs, LabelCoords);
+ 
+     det_labels = groundTruth(gtSource, labelDef.labelDefs, LabelCoords);
+ 
  cd ../
  
  save(exitLabelsName, 'det_labels')
