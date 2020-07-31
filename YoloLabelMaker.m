@@ -6,9 +6,7 @@ cd(CurrFPath)
 
 %%
 %Specify which labels you will turn into yolo format
-detLabelsName = 'gangster_det_labels.mat'
-%Specify the identifier of the label in the format
-labelIdentifier = 0;
+detLabelsName = 'detector_labels.mat'
 %% 
 % This segment of code loads the labels to conver and info of the labeled images
 
