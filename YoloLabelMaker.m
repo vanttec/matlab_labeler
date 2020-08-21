@@ -38,7 +38,7 @@ imageSizes = table('Size', [height(FilesTable), 2], 'VariableTypes', {'double', 
 % 
 % The variable cont tracks the label being converted
 
-Label_Coords = Labels.det_labels.LabelData;
+Label_Coords = Labels.gTruth.LabelData;
 
 NumberOfLabels = width(Label_Coords);
 
@@ -58,6 +58,8 @@ for cont=1:NumberOfLabels
      end
      
      Yolo_Coords = [FilesTable(:,'name') imageSizes Yolo_Coords]
+     
+     
 %% 
 % Here we converted the matlab format, which is x & y from the top-left corner 
 % to x and y from the center point, yolo format.

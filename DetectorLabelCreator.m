@@ -17,11 +17,11 @@ exitLabelsName = "detector_labels.mat";
 % This segment of the code allows the use of multiple detectors and labels to 
 % join them all in one run of the code. 
 
-Loops = 2;
+Loops = 1;
 
-detectorName = ["gangster_detector.mat" "police_detector.mat"];
-labelName = ["gangster" "police"];
-labelDefName = ["gangster_label_def.mat" "police_label_def.mat"];
+detectorName = ["gangster_detector.mat"];
+labelName = ["gangster"];
+labelDefName = ["gangster_label_def.mat"];
 
 for index=1:Loops
 %% 
@@ -30,6 +30,11 @@ for index=1:Loops
 
     load(detectorName(index));
     labelDef = load(labelDefName(index));
+    labelDef.labelDefs.R = labelDef.labelDefs.LabelColor{1,1}(1)
+    labelDef.labelDefs.G = labelDef.labelDefs.LabelColor{1,1}(2)
+    labelDef.labelDefs.B = labelDef.labelDefs.LabelColor{1,1}(3)
+    labelDef.labelDefs = removevars(labelDef.labelDefs, "LabelColor");
+    labelDef.labelDefs = mergevars(labelDef.labelDefs, ["R" "G" "B"], "NewVariableName", "LabelColor" )
 %% 
 % This segment verifies if the entry labels to load exist, then adds them in 
 % the same table
@@ -46,7 +51,7 @@ for index=1:Loops
     %images
     
     % Specify the folder where the images are.
-    cd val_data/
+    cd val_images/
     
     % Assign train data folder path to var myFolder
     myFolder = pwd;
